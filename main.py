@@ -5,15 +5,15 @@ import os
 from datetime import datetime as dt, timedelta as td 
 import smtplib   
 
-STOCK = 'TSLA'
-COMPANY_NAME = 'Tesla Inc'
+stock = 'TSLA'
+company_name = 'Tesla Inc'
 func = 'TIME_SERIES_DAILY'
 stock_url = 'https://www.alphavantage.co/query'
 stock_api_key = os.getenv('STOCK_API_KEY')
 news_url = 'https://newsapi.org/v2/everything'
 news_api_key = os.getenv('NEWS_API_KEY') 
 email = os.getenv('EMAIL')
-app_password = os.getenv('APP_PASSWORD')
+app_password = os.getenv('APP_PASSWORD') 
 
 up_arrow = '🔺'
 down_arrow = '🔻'
@@ -21,11 +21,11 @@ down_arrow = '🔻'
 now = dt.now()
 yesterday = now - td(days=1)
 current_date = str(now.date())
-yester_date = str(yesterday.date()) 
+yester_date = str(yesterday.date())  
 
 stock_params = {
     'function': func,
-    'symbol': STOCK,
+    'symbol': stock,
     'apikey': stock_api_key,
 }
 
@@ -33,14 +33,15 @@ stock_response = requests.get(stock_url, params=stock_params)
 stock_response.raise_for_status() 
 print(stock_response.status_code) 
 stock_data = stock_response.json()
+print(stock_data)
 
 yesterday_close = float(stock_data['Time Series (Daily)'][yester_date]['4. close']) 
 today_close = float(stock_data['Time Series (Daily)'][current_date]['4. close'])    
 
 news_params = {
     'apiKey': news_api_key,
-    'q': COMPANY_NAME,
-    'from': yester_date, 
+    'q': company_name,
+    'from': '25-02-25', 
     'language': 'en', 
 }
 
@@ -86,6 +87,6 @@ if percent_change >= 1:
     with smtplib.SMTP('smtp.gmail.com', port=587) as connection:
         connection.starttls() # make the connection secure 
         connection.login(user=email, password=app_password)
-        connection.sendmail(from_addr=email, to_addrs='liamesiht44@yahoo.com', msg=body.encode('utf-8'))
+        connection.sendmail(from_addr=email, to_addrs='johnroddy.16@gmail.com', msg=body.encode('utf-8'))
         
 # pretty cool little program! 
